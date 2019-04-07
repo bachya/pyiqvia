@@ -1,10 +1,10 @@
 # 🌻pypyiqvia: A clean, async-focused Python3 API for IQVIA data
 
-[![Travis CI](https://travis-ci.org/bachya/pyiqvia.svg?branch=master)](https://travis-ci.org/bachya/iqvia)
-[![PyPi](https://img.shields.io/pypi/v/pyiqvia.svg)](https://pypi.python.org/pypi/iqvia)
-[![Version](https://img.shields.io/pypi/pyversions/pyiqvia.svg)](https://pypi.python.org/pypi/iqvia)
-[![License](https://img.shields.io/pypi/l/pyiqvia.svg)](https://github.com/bachya/iqvia/blob/master/LICENSE)
-[![Code Coverage](https://codecov.io/gh/bachya/pyiqvia/branch/master/graph/badge.svg)](https://codecov.io/gh/bachya/iqvia)
+[![Travis CI](https://travis-ci.org/bachya/pyiqvia.svg?branch=master)](https://travis-ci.org/bachya/pyiqvia)
+[![PyPi](https://img.shields.io/pypi/v/pyiqvia.svg)](https://pypi.python.org/pypi/pyiqvia)
+[![Version](https://img.shields.io/pypi/pyversions/pyiqvia.svg)](https://pypi.python.org/pypi/pyiqvia)
+[![License](https://img.shields.io/pypi/l/pyiqvia.svg)](https://github.com/bachya/pyiqvia/blob/master/LICENSE)
+[![Code Coverage](https://codecov.io/gh/bachya/pyiqvia/branch/master/graph/badge.svg)](https://codecov.io/gh/bachya/pyiqvia)
 [![Maintainability](https://api.codeclimate.com/v1/badges/a8bab14f84196490b4a7/maintainability)](https://codeclimate.com/github/bachya/pyiqvia/maintainability)
 [![Say Thanks](https://img.shields.io/badge/SayThanks-!-1EAEDB.svg)](https://saythanks.io/to/bachya)
 
