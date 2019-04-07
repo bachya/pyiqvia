@@ -20,35 +20,22 @@ async def run(websession):
         print('Client instantiated for ZIP "{0}"'.format(client.zip_code))
 
         print()
-        print('CURRENT ALLERGENS')
+        print('Allergen Data:')
         print(await client.allergens.current())
-
-        print()
-        print('EXTENDED ALLERGENS')
         print(await client.allergens.extended())
-
-        print()
-        print('HISTORIC ALLERGENS')
         print(await client.allergens.historic())
-
-        print()
-        print('ALLERGY OUTLOOK')
         print(await client.allergens.outlook())
 
         print()
-        print('EXTENDED DISEASE INFO')
+        print('Disease Data:')
+        print(await client.disease.current())
         print(await client.disease.extended())
+        print(await client.disease.historic())
 
         print()
-        print('CURRENT ASTHMA INFO')
+        print('Asthma Data:')
         print(await client.asthma.current())
-
-        print()
-        print('EXTENDED ASTHMA INFO')
         print(await client.asthma.extended())
-
-        print()
-        print('HISTORIC ASTHMA INFO')
         print(await client.asthma.historic())
     except IQVIAError as err:
         print(err)
