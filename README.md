@@ -1,4 +1,4 @@
-# 👨🏻‍⚕️iqvia: A clean, async-focused Python3 API for IQVIA data (https://pollen.com, https://flustar.com, etc.)
+# 🌻iqvia: A clean, async-focused Python3 API for IQVIA data (https://pollen.com, https://flustar.com, etc.)
 
 [![Travis CI](https://travis-ci.org/bachya/iqvia.svg?branch=master)](https://travis-ci.org/bachya/iqvia)
 [![PyPi](https://img.shields.io/pypi/v/iqvia.svg)](https://pypi.python.org/pypi/iqvia)
