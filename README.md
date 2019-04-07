@@ -1,4 +1,4 @@
-# 🌻pypyiqvia: A clean, async-focused Python3 API for IQVIA data
+# 🌻 pyiqvia: A clean, async-focused Python3 API for IQVIA data
 
 [![Travis CI](https://travis-ci.org/bachya/pyiqvia.svg?branch=master)](https://travis-ci.org/bachya/pyiqvia)
 [![PyPi](https://img.shields.io/pypi/v/pyiqvia.svg)](https://pypi.python.org/pypi/pyiqvia)
