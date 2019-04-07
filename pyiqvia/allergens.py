@@ -38,5 +38,4 @@ class Allergens:
         except RequestError as err:
             if '404' in str(err):
                 raise InvalidZipError('No data returned for ZIP code')
-            else:
-                raise RequestError(err)
+            raise RequestError(err)
