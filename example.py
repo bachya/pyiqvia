@@ -3,8 +3,8 @@ import asyncio
 
 from aiohttp import ClientSession
 
-from pypollencom import Client
-from pypollencom.errors import PollenComError
+from iqvia import Client
+from iqvia.errors import PollenComError
 
 
 async def main() -> None:

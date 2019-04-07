@@ -6,7 +6,7 @@ import json
 import aiohttp
 import pytest
 
-from pypollencom import Client
+from iqvia import Client
 
 from .const import TEST_ZIP
 from .fixtures.disease import *  # noqa

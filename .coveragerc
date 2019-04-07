@@ -2,5 +2,5 @@
 source = iqvia
 
 omit =
-    iqvia/__version__.py
+    iqvia/const.py
 

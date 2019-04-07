@@ -6,8 +6,8 @@ import json
 import aiohttp
 import pytest
 
-from pypollencom import Client
-from pypollencom.errors import InvalidZipError
+from iqvia import Client
+from iqvia.errors import InvalidZipError
 
 from .const import TEST_BAD_ZIP, TEST_ZIP
 from .fixtures.allergens import *  # noqa

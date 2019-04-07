@@ -4,8 +4,8 @@
 import aiohttp
 import pytest
 
-from pypollencom import Client
-from pypollencom.errors import RequestError
+from iqvia import Client
+from iqvia.errors import RequestError
 
 from .const import TEST_ZIP
 
