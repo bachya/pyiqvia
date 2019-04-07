@@ -1,4 +1,4 @@
-# 🌻 pyiqvia: A clean, async-focused Python3 API for IQVIA
+# 🌻 pyiqvia: A clean, async-focused Python3 API for IQVIA™
 
 [![Travis CI](https://travis-ci.org/bachya/pyiqvia.svg?branch=master)](https://travis-ci.org/bachya/pyiqvia)
 [![PyPi](https://img.shields.io/pypi/v/pyiqvia.svg)](https://pypi.python.org/pypi/pyiqvia)
@@ -9,7 +9,7 @@
 [![Say Thanks](https://img.shields.io/badge/SayThanks-!-1EAEDB.svg)](https://saythanks.io/to/bachya)
 
 `pyiqvia` is an async-focused Python3 library for allergen, asthma, and disease
-data from the [IQVIA](https://www.iqvia.com) family of websites (such as 
+data from the [IQVIA™](https://www.iqvia.com) family of websites (such as 
 https://pollen.com, https://flustar.com, and more).
 
 # Python Versions
