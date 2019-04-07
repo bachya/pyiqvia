@@ -4,7 +4,7 @@ import asyncio
 from aiohttp import ClientSession
 
 from pyiqvia import Client
-from pyiqvia.errors import PollenComError
+from pyiqvia.errors import IQVIAError
 
 
 async def main() -> None:
@@ -50,7 +50,7 @@ async def run(websession):
         print()
         print('HISTORIC ASTHMA INFO')
         print(await client.asthma.historic())
-    except PollenComError as err:
+    except IQVIAError as err:
         print(err)
 
 
