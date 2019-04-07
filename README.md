@@ -1,20 +1,20 @@
-# 🌻iqvia: A clean, async-focused Python3 API for IQVIA data
+# 🌻pypyiqvia: A clean, async-focused Python3 API for IQVIA data
 
-[![Travis CI](https://travis-ci.org/bachya/iqvia.svg?branch=master)](https://travis-ci.org/bachya/iqvia)
-[![PyPi](https://img.shields.io/pypi/v/iqvia.svg)](https://pypi.python.org/pypi/iqvia)
-[![Version](https://img.shields.io/pypi/pyversions/iqvia.svg)](https://pypi.python.org/pypi/iqvia)
-[![License](https://img.shields.io/pypi/l/iqvia.svg)](https://github.com/bachya/iqvia/blob/master/LICENSE)
-[![Code Coverage](https://codecov.io/gh/bachya/iqvia/branch/master/graph/badge.svg)](https://codecov.io/gh/bachya/iqvia)
-[![Maintainability](https://api.codeclimate.com/v1/badges/a8bab14f84196490b4a7/maintainability)](https://codeclimate.com/github/bachya/iqvia/maintainability)
+[![Travis CI](https://travis-ci.org/bachya/pyiqvia.svg?branch=master)](https://travis-ci.org/bachya/iqvia)
+[![PyPi](https://img.shields.io/pypi/v/pyiqvia.svg)](https://pypi.python.org/pypi/iqvia)
+[![Version](https://img.shields.io/pypi/pyversions/pyiqvia.svg)](https://pypi.python.org/pypi/iqvia)
+[![License](https://img.shields.io/pypi/l/pyiqvia.svg)](https://github.com/bachya/iqvia/blob/master/LICENSE)
+[![Code Coverage](https://codecov.io/gh/bachya/pyiqvia/branch/master/graph/badge.svg)](https://codecov.io/gh/bachya/iqvia)
+[![Maintainability](https://api.codeclimate.com/v1/badges/a8bab14f84196490b4a7/maintainability)](https://codeclimate.com/github/bachya/pyiqvia/maintainability)
 [![Say Thanks](https://img.shields.io/badge/SayThanks-!-1EAEDB.svg)](https://saythanks.io/to/bachya)
 
-`iqvia` is an async-focused Python3 library for allergen, asthma, and disease data
+`pyiqvia` is an async-focused Python3 library for allergen, asthma, and disease data
 from the [IQVIA](https://www.iqvia.com) family of websites (such as 
 https://pollen.com, https://flustar.com, and more).
 
 # Python Versions
 
-`iqvia` is currently supported on:
+`pyiqvia` is currently supported on:
 
 * Python 3.5
 * Python 3.6
@@ -26,12 +26,12 @@ run on Python 3.5 will fail.
 # Installation
 
 ```python
-pip install iqvia
+pip install pyiqvia
 ```
 
 # Usage
 
-`iqvia` starts within an
+`pyiqvia` starts within an
 [aiohttp](https://aiohttp.readthedocs.io/en/stable/) `ClientSession`:
 
 ```python
@@ -39,7 +39,7 @@ import asyncio
 
 from aiohttp import ClientSession
 
-from iqvia import Client
+from pyiqvia import Client
 
 
 async def main() -> None:
@@ -58,7 +58,7 @@ import asyncio
 
 from aiohttp import ClientSession
 
-from iqvia import Client
+from pyiqvia import Client
 
 
 async def main() -> None:
@@ -99,9 +99,9 @@ asyncio.get_event_loop().run_until_complete(main())
 
 # Contributing
 
-1. [Check for open features/bugs](https://github.com/bachya/iqvia/issues)
-  or [initiate a discussion on one](https://github.com/bachya/iqvia/issues/new).
-2. [Fork the repository](https://github.com/bachya/iqvia/fork).
+1. [Check for open features/bugs](https://github.com/bachya/pyiqvia/issues)
+  or [initiate a discussion on one](https://github.com/bachya/pyiqvia/issues/new).
+2. [Fork the repository](https://github.com/bachya/pyiqvia/fork).
 3. Install the dev environment: `make init`.
 4. Enter the virtual environment: `pipenv shell`
 5. Code your new feature or bug fix.

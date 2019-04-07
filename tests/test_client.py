@@ -4,8 +4,8 @@
 import aiohttp
 import pytest
 
-from iqvia import Client
-from iqvia.errors import RequestError
+from pyiqvia import Client
+from pyiqvia.errors import RequestError
 
 from .const import TEST_ZIP
 

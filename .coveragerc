@@ -1,6 +1,6 @@
 [run]
-source = iqvia
+source = pyiqvia
 
 omit =
-    iqvia/const.py
+    pyiqvia/const.py
 

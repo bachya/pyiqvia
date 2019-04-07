@@ -12,12 +12,12 @@ from shutil import rmtree
 
 from setuptools import find_packages, setup, Command
 
-from iqvia.const import __version__
+from pyiqvia.const import __version__
 
 # Package meta-data.
-NAME = 'iqvia'
+NAME = 'pyiqvia'
 DESCRIPTION = 'A clean, async-focused Python3 API for IQVIA data'
-URL = 'https://github.com/bachya/iqvia'
+URL = 'https://github.com/bachya/pyiqvia'
 EMAIL = 'bachya1208@gmail.com'
 AUTHOR = 'Aaron Bach'
 REQUIRES_PYTHON = '>=3.5.3'

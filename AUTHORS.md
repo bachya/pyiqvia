@@ -1,4 +1,4 @@
-# Contributions to `iqvia`
+# Contributions to `pyiqvia`
 
 ## Owners
 
