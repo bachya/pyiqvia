@@ -90,8 +90,14 @@ async def main() -> None:
       # Get historic asthma information:
       await client.asthma.historic()
 
+      # Get current cold and flu information:
+      await client.disease.current()
+
       # Get extended forecast cold and flu information:
       await client.disease.extended()
+
+      # Get historic cold and flu information:
+      await client.disease.historic()
 
 
 asyncio.get_event_loop().run_until_complete(main())
