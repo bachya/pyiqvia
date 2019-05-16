@@ -5,9 +5,9 @@ import aiohttp
 import pytest
 
 from pyiqvia import Client
-from pyiqvia.errors import RequestError
+from pyiqvia.errors import InvalidZipError, RequestError
 
-from .const import TEST_ZIP
+from .const import TEST_BAD_ZIP, TEST_ZIP
 
 
 # pylint: disable=protected-access
@@ -17,6 +17,14 @@ async def test_create():
     async with aiohttp.ClientSession() as websession:
         client = Client(TEST_ZIP, websession)
         assert client.zip_code == TEST_ZIP
+
+
+@pytest.mark.asyncio
+async def test_bad_zip(event_loop):
+    """Test attempting to create a client with a bad ZIP code."""
+    with pytest.raises(InvalidZipError):
+        async with aiohttp.ClientSession(loop=event_loop) as websession:
+            client = Client(TEST_BAD_ZIP, websession)
 
 
 @pytest.mark.asyncio

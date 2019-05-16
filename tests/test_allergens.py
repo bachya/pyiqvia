@@ -7,9 +7,8 @@ import aiohttp
 import pytest
 
 from pyiqvia import Client
-from pyiqvia.errors import InvalidZipError
 
-from .const import TEST_BAD_ZIP, TEST_ZIP
+from .const import TEST_ZIP
 from .fixtures.allergens import *  # noqa
 
 
@@ -70,11 +69,3 @@ async def test_outlook(aresponses, event_loop, fixture_outlook):
 
         outlook = await client.allergens.outlook()
         assert outlook['Trend'] == 'subsiding'
-
-
-@pytest.mark.asyncio
-async def test_bad_zip(event_loop):
-    """Test attempting to create a client with a bad ZIP code."""
-    with pytest.raises(InvalidZipError):
-        async with aiohttp.ClientSession(loop=event_loop) as websession:
-            client = Client(TEST_BAD_ZIP, websession)
