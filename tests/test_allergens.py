@@ -73,23 +73,8 @@ async def test_outlook(aresponses, event_loop, fixture_outlook):
 
 
 @pytest.mark.asyncio
-async def test_bad_zip(aresponses, event_loop, fixture_empty_response):
-    """Test the cases that would arise from a bad ZIP code."""
-    aresponses.add(
-        'www.pollen.com',
-        '/api/forecast/current/pollen/{0}'.format(TEST_BAD_ZIP), 'get',
-        aresponses.Response(
-            text=json.dumps(fixture_empty_response), status=200))
-    aresponses.add(
-        'www.pollen.com', '/api/forecast/outlook/{0}'.format(TEST_BAD_ZIP),
-        'get', aresponses.Response(text='', status=404))
-
+async def test_bad_zip(event_loop):
+    """Test attempting to create a client with a bad ZIP code."""
     with pytest.raises(InvalidZipError):
         async with aiohttp.ClientSession(loop=event_loop) as websession:
             client = Client(TEST_BAD_ZIP, websession)
-            await client.allergens.current()
-
-    with pytest.raises(InvalidZipError):
-        async with aiohttp.ClientSession(loop=event_loop) as websession:
-            client = Client(TEST_BAD_ZIP, websession)
-            await client.allergens.outlook()
