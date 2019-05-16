@@ -6,11 +6,16 @@ from aiohttp import ClientSession, client_exceptions
 from .allergens import Allergens
 from .asthma import Asthma
 from .disease import Disease
-from .errors import RequestError
+from .errors import InvalidZipError, RequestError
 
 API_USER_AGENT = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_4) ' \
     + 'AppleWebKit/537.36 (KHTML, like Gecko) ' \
     + 'Chrome/65.0.3325.181 Safari/537.36'
+
+
+def is_valid_zip_code(zip_code: str) -> bool:
+    """Define whether a string ZIP code is valid."""
+    return len(zip_code) == 5 and zip_code.isdigit()
 
 
 class Client:  # pylint: disable=too-few-public-methods
@@ -18,6 +23,9 @@ class Client:  # pylint: disable=too-few-public-methods
 
     def __init__(self, zip_code: str, websession: ClientSession) -> None:
         """Initialize."""
+        if not is_valid_zip_code(zip_code):
+            raise InvalidZipError('Invalid ZIP Code: {0}'.format(zip_code))
+
         self._websession = websession
         self.zip_code = zip_code
 
