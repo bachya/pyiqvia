@@ -24,7 +24,7 @@ class Client:  # pylint: disable=too-few-public-methods
     def __init__(self, zip_code: str, websession: ClientSession) -> None:
         """Initialize."""
         if not is_valid_zip_code(zip_code):
-            raise InvalidZipError('Invalid ZIP Code: {0}'.format(zip_code))
+            raise InvalidZipError('Invalid ZIP code: {0}'.format(zip_code))
 
         self._websession = websession
         self.zip_code = zip_code
