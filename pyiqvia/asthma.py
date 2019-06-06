@@ -12,17 +12,17 @@ class Asthma:  # pylint: disable=too-few-public-methods
     async def current(self) -> dict:
         """Get current asthma info."""
         return await self._request(
-            'get',
-            'https://www.asthmaforecast.com/api/forecast/current/asthma')
+            "get", "https://www.asthmaforecast.com/api/forecast/current/asthma"
+        )
 
     async def extended(self) -> dict:
         """Get extended asthma info."""
         return await self._request(
-            'get',
-            'https://www.asthmaforecast.com/api/forecast/extended/asthma')
+            "get", "https://www.asthmaforecast.com/api/forecast/extended/asthma"
+        )
 
     async def historic(self) -> dict:
         """Get historic asthma info."""
         return await self._request(
-            'get',
-            'https://www.asthmaforecast.com/api/forecast/historic/asthma')
+            "get", "https://www.asthmaforecast.com/api/forecast/historic/asthma"
+        )

@@ -12,19 +12,21 @@ class Allergens:
     async def current(self) -> dict:
         """Get current allergy conditions."""
         return await self._request(
-            'get', 'https://www.pollen.com/api/forecast/current/pollen')
+            "get", "https://www.pollen.com/api/forecast/current/pollen"
+        )
 
     async def extended(self) -> dict:
         """Get extended allergen info."""
         return await self._request(
-            'get', 'https://www.pollen.com/api/forecast/extended/pollen')
+            "get", "https://www.pollen.com/api/forecast/extended/pollen"
+        )
 
     async def historic(self) -> dict:
         """Get historic allergen info."""
         return await self._request(
-            'get', 'https://www.pollen.com/api/forecast/historic/pollen')
+            "get", "https://www.pollen.com/api/forecast/historic/pollen"
+        )
 
     async def outlook(self) -> dict:
         """Get allergen outlook."""
-        return await self._request(
-            'get', 'https://www.pollen.com/api/forecast/outlook')
+        return await self._request("get", "https://www.pollen.com/api/forecast/outlook")

@@ -16,24 +16,24 @@ async def main() -> None:
 async def run(websession):
     """Run."""
     try:
-        client = Client('17015', websession)
+        client = Client("17015", websession)
         print('Client instantiated for ZIP "{0}"'.format(client.zip_code))
 
         print()
-        print('Allergen Data:')
+        print("Allergen Data:")
         print(await client.allergens.current())
         print(await client.allergens.extended())
         print(await client.allergens.historic())
         print(await client.allergens.outlook())
 
         print()
-        print('Disease Data:')
+        print("Disease Data:")
         print(await client.disease.current())
         print(await client.disease.extended())
         print(await client.disease.historic())
 
         print()
-        print('Asthma Data:')
+        print("Asthma Data:")
         print(await client.asthma.current())
         print(await client.asthma.extended())
         print(await client.asthma.historic())
