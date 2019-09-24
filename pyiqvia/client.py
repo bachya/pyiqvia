@@ -26,7 +26,7 @@ class Client:  # pylint: disable=too-few-public-methods
     def __init__(self, zip_code: str, websession: ClientSession) -> None:
         """Initialize."""
         if not is_valid_zip_code(zip_code):
-            raise InvalidZipError("Invalid ZIP code: {0}".format(zip_code))
+            raise InvalidZipError(f"Invalid ZIP code: {zip_code}")
 
         self._websession = websession
         self.zip_code = zip_code
@@ -42,10 +42,9 @@ class Client:  # pylint: disable=too-few-public-methods
         *,
         headers: dict = None,
         params: dict = None,
-        json: dict = None
+        json: dict = None,
     ) -> dict:
         """Make a request against AirVisual."""
-        full_url = "{0}/{1}".format(url, self.zip_code)
         pieces = urlparse(url)
 
         if not headers:
@@ -53,19 +52,17 @@ class Client:  # pylint: disable=too-few-public-methods
         headers.update(
             {
                 "Content-Type": "application/json",
-                "Referer": "{0}://{1}".format(pieces.scheme, pieces.netloc),
+                "Referer": f"{pieces.scheme}://{pieces.netloc}",
                 "User-Agent": API_USER_AGENT,
             }
         )
 
         async with self._websession.request(
-            method, full_url, headers=headers, params=params, json=json
+            method, f"{url}/{self.zip_code}", headers=headers, params=params, json=json
         ) as resp:
             try:
                 resp.raise_for_status()
                 data = await resp.json(content_type=None)
                 return data
             except client_exceptions.ClientError as err:
-                raise RequestError(
-                    "Error requesting data from {0}: {1}".format(url, err)
-                )
+                raise RequestError(f"Error requesting data from {url}: {err}")

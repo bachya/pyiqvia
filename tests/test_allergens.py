@@ -17,7 +17,7 @@ async def test_current(aresponses, event_loop, fixture_current):
     """Test getting current allergen data."""
     aresponses.add(
         "www.pollen.com",
-        "/api/forecast/current/pollen/{0}".format(TEST_ZIP),
+        f"/api/forecast/current/pollen/{TEST_ZIP}",
         "get",
         aresponses.Response(text=json.dumps(fixture_current), status=200),
     )
@@ -34,7 +34,7 @@ async def test_extended(aresponses, event_loop, fixture_extended):
     """Test getting extended allergen info."""
     aresponses.add(
         "www.pollen.com",
-        "/api/forecast/extended/pollen/{0}".format(TEST_ZIP),
+        f"/api/forecast/extended/pollen/{TEST_ZIP}",
         "get",
         aresponses.Response(text=json.dumps(fixture_extended), status=200),
     )
@@ -51,7 +51,7 @@ async def test_historic(aresponses, event_loop, fixture_historic):
     """Test getting historic allergen info."""
     aresponses.add(
         "www.pollen.com",
-        "/api/forecast/historic/pollen/{0}".format(TEST_ZIP),
+        f"/api/forecast/historic/pollen/{TEST_ZIP}",
         "get",
         aresponses.Response(text=json.dumps(fixture_historic), status=200),
     )
@@ -68,7 +68,7 @@ async def test_outlook(aresponses, event_loop, fixture_outlook):
     """Test getting outlook allergen info."""
     aresponses.add(
         "www.pollen.com",
-        "/api/forecast/outlook/{0}".format(TEST_ZIP),
+        f"/api/forecast/outlook/{TEST_ZIP}",
         "get",
         aresponses.Response(text=json.dumps(fixture_outlook), status=200),
     )

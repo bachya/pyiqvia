@@ -24,7 +24,7 @@ async def test_bad_zip(event_loop):
     """Test attempting to create a client with a bad ZIP code."""
     with pytest.raises(InvalidZipError):
         async with aiohttp.ClientSession(loop=event_loop) as websession:
-            client = Client(TEST_BAD_ZIP, websession)
+            _ = Client(TEST_BAD_ZIP, websession)
 
 
 @pytest.mark.asyncio
@@ -32,13 +32,13 @@ async def test_request_error(aresponses, event_loop):
     """Test authenticating the device."""
     aresponses.add(
         "www.pollen.com",
-        "/api/bad_endpoint/{0}".format(TEST_ZIP),
+        f"/api/bad_endpoint/{TEST_ZIP}",
         "get",
         aresponses.Response(text="", status=404),
     )
     aresponses.add(
         "www.pollen.com",
-        "/api/forecast/outlook/{0}".format(TEST_ZIP),
+        f"/api/forecast/outlook/{TEST_ZIP}",
         "get",
         aresponses.Response(text="", status=500),
     )
