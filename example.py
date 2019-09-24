@@ -17,7 +17,7 @@ async def run(websession):
     """Run."""
     try:
         client = Client("17015", websession)
-        print('Client instantiated for ZIP "{0}"'.format(client.zip_code))
+        print(f'Client instantiated for ZIP "{client.zip_code}"')
 
         print()
         print("Allergen Data:")
