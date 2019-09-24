@@ -7,7 +7,7 @@ class Allergens:
 
     def __init__(self, request: Callable[..., Awaitable[dict]]) -> None:
         """Initialize."""
-        self._request = request
+        self._request: Callable[..., Awaitable[dict]] = request
 
     async def current(self) -> dict:
         """Get current allergy conditions."""
