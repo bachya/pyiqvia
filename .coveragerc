@@ -2,5 +2,5 @@
 source = pyiqvia
 
 omit =
-    pyiqvia/const.py
+    pyiqvia/__version__.py
 
