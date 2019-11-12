@@ -1,6 +1,2 @@
 [run]
 source = pyiqvia
-
-omit =
-    pyiqvia/__version__.py
-
