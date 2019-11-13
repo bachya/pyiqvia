@@ -1,6 +1,6 @@
 # 🌻 pyiqvia: A clean, async-focused Python3 API for IQVIA™
 
-[![Travis CI](https://travis-ci.org/bachya/pyiqvia.svg?branch=master)](https://travis-ci.org/bachya/pyiqvia)
+[![CI](https://github.com/bachya/pyiqvia/workflows/CI/badge.svg)](https://github.com/bachya/pyiqvia/actions)
 [![PyPi](https://img.shields.io/pypi/v/pyiqvia.svg)](https://pypi.python.org/pypi/pyiqvia)
 [![Version](https://img.shields.io/pypi/pyversions/pyiqvia.svg)](https://pypi.python.org/pypi/pyiqvia)
 [![License](https://img.shields.io/pypi/l/pyiqvia.svg)](https://github.com/bachya/pyiqvia/blob/master/LICENSE)

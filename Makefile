@@ -8,6 +8,7 @@ init:
 	.venv/bin/pip3 install poetry
 	. .venv/bin/activate; poetry lock; poetry install; pre-commit install
 lint:
+	.venv/bin/black --check --fast pyiqvia
 	.venv/bin/flake8 pyiqvia
 	.venv/bin/pydocstyle pyiqvia
 	.venv/bin/pylint pyiqvia
