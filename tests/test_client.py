@@ -3,7 +3,6 @@
 
 import aiohttp
 import pytest
-
 from pyiqvia import Client
 from pyiqvia.errors import InvalidZipError, RequestError
 

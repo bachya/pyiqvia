@@ -5,7 +5,6 @@ import json
 
 import aiohttp
 import pytest
-
 from pyiqvia import Client
 
 from .const import TEST_ZIP
