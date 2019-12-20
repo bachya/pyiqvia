@@ -9,16 +9,7 @@ init:
 	.venv/bin/poetry lock
 	.venv/bin/poetry install
 	.venv/bin/pre-commit install
-lint:
-	.venv/bin/black --check --fast pyiqvia
-	.venv/bin/flake8 pyiqvia
-	.venv/bin/pydocstyle pyiqvia
-	.venv/bin/pylint pyiqvia
 publish:
 	.venv/bin/poetry build
 	.venv/bin/poetry publish
 	rm -rf dist/ build/ .egg *.egg-info/
-test:
-	.venv/bin/py.test
-typing:
-	.venv/bin/mypy --ignore-missing-imports pyiqvia
