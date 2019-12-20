@@ -2,9 +2,10 @@
 # pylint: disable=redefined-outer-name,unused-import
 
 import aiohttp
+import pytest
+
 from pyiqvia import Client
 from pyiqvia.errors import InvalidZipError, RequestError
-import pytest
 
 from .const import TEST_BAD_ZIP, TEST_ZIP
 

@@ -4,8 +4,9 @@
 import json
 
 import aiohttp
-from pyiqvia import Client
 import pytest
+
+from pyiqvia import Client
 
 from .const import TEST_ZIP
 from .fixtures.disease import *  # noqa
