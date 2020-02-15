@@ -53,7 +53,7 @@ class Client:  # pylint: disable=too-few-public-methods
         headers.update(
             {
                 "Content-Type": "application/json",
-                "Referer": f"{pieces.scheme}://{pieces.netloc}",
+                "Referrer": f"{pieces.scheme}://{pieces.netloc}",
                 "User-Agent": API_USER_AGENT,
             }
         )
