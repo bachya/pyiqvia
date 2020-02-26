@@ -23,7 +23,6 @@ repos:
     hooks:
       - id: codespell
         args:
-          - --ignore-words-list=Referer
           - --skip="./.*,*.json"
           - --quiet-level=4
         exclude_types: [json]
