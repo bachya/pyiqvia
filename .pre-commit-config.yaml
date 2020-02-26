@@ -23,8 +23,9 @@ repos:
     hooks:
       - id: codespell
         args:
+          - --ignore-words-list=Referer
           - --skip="./.*,*.json"
-          - --quiet-level=2
+          - --quiet-level=4
         exclude_types: [json]
   - repo: https://gitlab.com/pycqa/flake8
     rev: 3.7.9
