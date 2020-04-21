@@ -12,6 +12,11 @@
 data from the [IQVIA™](https://www.iqvia.com) family of websites (such as 
 https://pollen.com, https://flustar.com, and more).
 
+- [Python Versions](#python-versions)
+- [Installation](#installation)
+- [Usage](#usage)
+- [Contributing](#contributing)
+
 # Python Versions
 
 `pyiqvia` is currently supported on:
@@ -28,9 +33,6 @@ pip install pyiqvia
 
 # Usage
 
-`pyiqvia` starts within an
-[aiohttp](https://aiohttp.readthedocs.io/en/stable/) `ClientSession`:
-
 ```python
 import asyncio
 
@@ -40,15 +42,51 @@ from pyiqvia import Client
 
 
 async def main() -> None:
-    """Create the aiohttp session and run the example."""
-    async with ClientSession() as websession:
-      # YOUR CODE HERE
+    """Run!"""
+    client = Client(80012)
+
+    # ZIP codes starting with 0 need to be provided as strings:
+    client = Client('00544')
+
+    # Get current allergen information:
+    await client.allergens.current()
+
+    # Get more information on the current allergen outlook:
+    await client.allergens.outlook()
+
+    # Get extended forecast allergen information:
+    await client.allergens.extended()
+
+    # Get historic allergen information:
+    await client.allergens.historic()
+
+    # Get current asthma information:
+    await client.asthma.current()
+
+    # Get extended forecast asthma information:
+    await client.asthma.extended()
+
+    # Get historic asthma information:
+    await client.asthma.historic()
+
+    # Get current cold and flu information:
+    await client.disease.current()
+
+    # Get extended forecast cold and flu information:
+    await client.disease.extended()
+
+    # Get historic cold and flu information:
+    await client.disease.historic()
 
 
-asyncio.get_event_loop().run_until_complete(main())
+asyncio.run(main())
 ```
 
-Create a client and get to it:
+By default, the library creates a new connection to IQVIA with each coroutine. If you
+are calling a large number of coroutines (or merely want to squeeze out every second of
+runtime savings possible), an
+[`aiohttp`](https://github.com/aio-libs/aiohttp) `ClientSession` can be used for connection
+pooling:
 
 ```python
 import asyncio
@@ -59,45 +97,14 @@ from pyiqvia import Client
 
 
 async def main() -> None:
-    """Create the aiohttp session and run the example."""
-    async with ClientSession() as websession:
-      client = Client(80012, websession)
+    """Run!"""
+    async with ClientSession() as session:
+        client = Client(80012, session=session)
 
-      # ZIP codes starting with 0 need to be provided as strings:
-      client = Client('00544', websession)
-
-      # Get current allergen information:
-      await client.allergens.current()
-
-      # Get more information on the current allergen outlook:
-      await client.allergens.outlook()
-
-      # Get extended forecast allergen information:
-      await client.allergens.extended()
-
-      # Get historic allergen information:
-      await client.allergens.historic()
-
-      # Get current asthma information:
-      await client.asthma.current()
-
-      # Get extended forecast asthma information:
-      await client.asthma.extended()
-
-      # Get historic asthma information:
-      await client.asthma.historic()
-
-      # Get current cold and flu information:
-      await client.disease.current()
-
-      # Get extended forecast cold and flu information:
-      await client.disease.extended()
-
-      # Get historic cold and flu information:
-      await client.disease.historic()
+        # ...
 
 
-asyncio.get_event_loop().run_until_complete(main())
+asyncio.run(main())
 ```
 
 # Contributing
@@ -106,7 +113,7 @@ asyncio.get_event_loop().run_until_complete(main())
   or [initiate a discussion on one](https://github.com/bachya/pyiqvia/issues/new).
 2. [Fork the repository](https://github.com/bachya/pyiqvia/fork).
 3. (_optional, but highly recommended_) Create a virtual environment: `python3 -m venv .venv`
-4. (_optional, but highly recommended_) Enter the virtual environment: `source ./venv/bin/activate`
+4. (_optional, but highly recommended_) Enter the virtual environment: `source ./.venv/bin/activate`
 5. Install the dev environment: `script/setup`
 6. Code your new feature or bug fix.
 7. Write tests that cover your new functionality.

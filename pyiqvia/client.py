@@ -2,14 +2,16 @@
 from typing import Optional
 from urllib.parse import ParseResult, urlparse
 
-from aiohttp import ClientSession, client_exceptions
+from aiohttp import ClientSession, ClientTimeout
+from aiohttp.client_exceptions import ClientError
 
 from .allergens import Allergens
 from .asthma import Asthma
 from .disease import Disease
 from .errors import InvalidZipError, RequestError
 
-API_USER_AGENT: str = (
+DEFAULT_TIMEOUT: int = 10
+DEFAULT_USER_AGENT: str = (
     "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_4) "
     + "AppleWebKit/537.36 (KHTML, like Gecko) "
     + "Chrome/65.0.3325.181 Safari/537.36"
@@ -24,12 +26,14 @@ def is_valid_zip_code(zip_code: str) -> bool:
 class Client:  # pylint: disable=too-few-public-methods
     """Define the client."""
 
-    def __init__(self, zip_code: str, websession: ClientSession) -> None:
+    def __init__(
+        self, zip_code: str, *, session: Optional[ClientSession] = None
+    ) -> None:
         """Initialize."""
         if not is_valid_zip_code(zip_code):
             raise InvalidZipError(f"Invalid ZIP code: {zip_code}")
 
-        self._websession: ClientSession = websession
+        self._session: ClientSession = session
         self.zip_code: str = zip_code
 
         self.allergens: Allergens = Allergens(self._request)
@@ -48,22 +52,35 @@ class Client:  # pylint: disable=too-few-public-methods
         """Make a request against AirVisual."""
         pieces: ParseResult = urlparse(url)
 
-        if not headers:
-            headers = {}
-        headers.update(
+        _headers = headers or {}
+        _headers.update(
             {
                 "Content-Type": "application/json",
                 "Referer": f"{pieces.scheme}://{pieces.netloc}",
-                "User-Agent": API_USER_AGENT,
+                "User-Agent": DEFAULT_USER_AGENT,
             }
         )
 
-        async with self._websession.request(
-            method, f"{url}/{self.zip_code}", headers=headers, params=params, json=json
-        ) as resp:
-            try:
+        use_running_session = self._session and not self._session.closed
+
+        if use_running_session:
+            session = self._session
+        else:
+            session = ClientSession(timeout=ClientTimeout(total=DEFAULT_TIMEOUT))
+
+        try:
+            async with session.request(
+                method,
+                f"{url}/{self.zip_code}",
+                headers=_headers,
+                params=params,
+                json=json,
+            ) as resp:
                 resp.raise_for_status()
                 data: dict = await resp.json(content_type=None)
                 return data
-            except client_exceptions.ClientError as err:
-                raise RequestError(f"Error requesting data from {url}: {err}")
+        except ClientError as err:
+            raise RequestError(f"Error requesting data from {url}: {err}")
+        finally:
+            if not use_running_session:
+                await session.close()

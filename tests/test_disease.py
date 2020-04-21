@@ -19,8 +19,8 @@ async def test_current(aresponses):
         ),
     )
 
-    async with aiohttp.ClientSession() as websession:
-        client = Client(TEST_ZIP, websession)
+    async with aiohttp.ClientSession() as session:
+        client = Client(TEST_ZIP, session=session)
         current = await client.disease.current()
         assert len(current["Location"]["periods"]) == 2
 
@@ -37,8 +37,8 @@ async def test_extended(aresponses):
         ),
     )
 
-    async with aiohttp.ClientSession() as websession:
-        client = Client(TEST_ZIP, websession)
+    async with aiohttp.ClientSession() as session:
+        client = Client(TEST_ZIP, session=session)
         extended = await client.disease.extended()
         assert len(extended["Location"]["periods"]) == 4
 
@@ -55,7 +55,7 @@ async def test_historic(aresponses):
         ),
     )
 
-    async with aiohttp.ClientSession() as websession:
-        client = Client(TEST_ZIP, websession)
+    async with aiohttp.ClientSession() as session:
+        client = Client(TEST_ZIP, session=session)
         historic = await client.disease.historic()
         assert len(historic["Location"]["periods"]) == 26
