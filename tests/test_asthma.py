@@ -19,8 +19,8 @@ async def test_current(aresponses):
         ),
     )
 
-    async with aiohttp.ClientSession() as websession:
-        client = Client(TEST_ZIP, websession)
+    async with aiohttp.ClientSession() as session:
+        client = Client(TEST_ZIP, session=session)
         current = await client.asthma.current()
         assert len(current["Location"]["periods"]) == 3
 
@@ -37,8 +37,8 @@ async def test_extended(aresponses):
         ),
     )
 
-    async with aiohttp.ClientSession() as websession:
-        client = Client(TEST_ZIP, websession)
+    async with aiohttp.ClientSession() as session:
+        client = Client(TEST_ZIP, session=session)
         extended = await client.asthma.extended()
         assert len(extended["Location"]["periods"]) == 5
 
@@ -55,7 +55,7 @@ async def test_endpoints(aresponses):
         ),
     )
 
-    async with aiohttp.ClientSession() as websession:
-        client = Client(TEST_ZIP, websession)
+    async with aiohttp.ClientSession() as session:
+        client = Client(TEST_ZIP, session=session)
         historic = await client.asthma.historic()
         assert len(historic["Location"]["periods"]) == 30
