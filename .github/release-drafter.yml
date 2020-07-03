@@ -1,5 +1,8 @@
 ---
 categories:
+  - title: "🚨 Breaking Change"
+    labels:
+      - "breaking change"
   - title: "🚀 Features"
     labels:
       - "enhancement"
