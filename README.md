@@ -24,6 +24,7 @@ https://pollen.com, https://flustar.com, and more).
 * Python 3.6
 * Python 3.7
 * Python 3.8
+* Python 3.9
 
 # Installation
 
