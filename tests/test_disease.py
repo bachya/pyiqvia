@@ -11,7 +11,7 @@ from .common import TEST_ZIP, load_fixture
 async def test_current(aresponses):
     """Test getting current cold and flu data."""
     aresponses.add(
-        "www.flustar.com",
+        "flustar.com",
         f"/api/forecast/current/cold/{TEST_ZIP}",
         "get",
         aresponses.Response(
@@ -47,7 +47,7 @@ async def test_extended(aresponses):
 async def test_historic(aresponses):
     """Test getting historic cold and flu data."""
     aresponses.add(
-        "www.flustar.com",
+        "flustar.com",
         f"/api/forecast/historic/cold/{TEST_ZIP}",
         "get",
         aresponses.Response(
