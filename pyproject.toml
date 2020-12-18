@@ -19,7 +19,7 @@ use_parentheses = true
 
 [tool.poetry]
 name = "pyiqvia"
-version = "0.3.0"
+version = "0.3.1"
 description = "A clean, async-focused Python3 API for IQVIA data"
 readme = "README.md"
 authors = ["Aaron Bach <bachya1208@gmail.com>"]
