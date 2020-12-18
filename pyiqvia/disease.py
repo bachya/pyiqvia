@@ -12,7 +12,7 @@ class Disease:  # pylint: disable=too-few-public-methods
     async def current(self) -> dict:
         """Get current disease info."""
         return await self._request(
-            "get", "https://www.flustar.com/api/forecast/current/cold"
+            "get", "https://flustar.com/api/forecast/current/cold"
         )
 
     async def extended(self) -> dict:
@@ -24,5 +24,5 @@ class Disease:  # pylint: disable=too-few-public-methods
     async def historic(self) -> dict:
         """Get historic disease info."""
         return await self._request(
-            "get", "https://www.flustar.com/api/forecast/historic/cold"
+            "get", "https://flustar.com/api/forecast/historic/cold"
         )
