@@ -44,10 +44,8 @@ from pyiqvia import Client
 
 async def main() -> None:
     """Run!"""
-    client = Client(80012)
-
-    # ZIP codes starting with 0 need to be provided as strings:
-    client = Client('00544')
+    # Note that ZIP codes must be provided as strings:
+    client = Client("80012")
 
     # Get current allergen information:
     await client.allergens.current()
@@ -100,7 +98,7 @@ from pyiqvia import Client
 async def main() -> None:
     """Run!"""
     async with ClientSession() as session:
-        client = Client(80012, session=session)
+        client = Client("80012", session=session)
 
         # ...
 
