@@ -5,7 +5,7 @@ from urllib.parse import urlparse
 
 from aiohttp import ClientSession
 from aiohttp.client_exceptions import ClientError
-from async_timeout import timeout
+from async_request_timeout import timeout
 
 from .allergens import Allergens
 from .asthma import Asthma
@@ -33,14 +33,14 @@ class Client:  # pylint: disable=too-few-public-methods
         zip_code: str,
         *,
         session: Optional[ClientSession] = None,
-        request_timeout: int = DEFAULT_TIMEOUT,
+        request_timeout: int = DEFAULT_TIMEOUT
     ) -> None:
         """Initialize."""
         if not is_valid_zip_code(zip_code):
             raise InvalidZipError(f"Invalid ZIP code: {zip_code}")
 
         self._session: ClientSession = session
-        self._timeout = timeout
+        self._request_timeout = request_timeout
         self.zip_code = zip_code
 
         self.allergens = Allergens(self._request)
@@ -76,7 +76,7 @@ class Client:  # pylint: disable=too-few-public-methods
             session = ClientSession()
 
         try:
-            async with timeout(self._timeout), session.request(
+            async with timeout(self._request_timeout), session.request(
                 method,
                 f"{url}/{self.zip_code}",
                 headers=_headers,
