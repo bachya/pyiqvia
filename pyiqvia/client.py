@@ -33,7 +33,7 @@ class Client:  # pylint: disable=too-few-public-methods
         zip_code: str,
         *,
         session: Optional[ClientSession] = None,
-        timeout: int = DEFAULT_TIMEOUT,
+        request_timeout: int = DEFAULT_TIMEOUT,
     ) -> None:
         """Initialize."""
         if not is_valid_zip_code(zip_code):
@@ -88,8 +88,8 @@ class Client:  # pylint: disable=too-few-public-methods
                 return data
         except ClientError as err:
             raise RequestError(f"Error requesting data from {url}: {err}") from err
-        except asyncio.exceptions.TimeoutError:
-            raise RequestError(f"Timed out while requesting {url}")
+        except asyncio.exceptions.TimeoutError as err:
+            raise RequestError(f"Timed out while requesting {url}") from err
         finally:
             if not use_running_session:
                 await session.close()
