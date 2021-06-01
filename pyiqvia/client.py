@@ -1,17 +1,19 @@
 """Define a client to interact with Pollen.com."""
+import asyncio
 from typing import Optional
 from urllib.parse import ParseResult, urlparse
 
-from aiohttp import ClientSession, ClientTimeout
+from aiohttp import ClientSession
 from aiohttp.client_exceptions import ClientError
+from async_timeout import timeout
 
 from .allergens import Allergens
 from .asthma import Asthma
 from .disease import Disease
 from .errors import InvalidZipError, RequestError
 
-DEFAULT_TIMEOUT: int = 10
-DEFAULT_USER_AGENT: str = (
+DEFAULT_TIMEOUT = 3
+DEFAULT_USER_AGENT = (
     "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_4) "
     + "AppleWebKit/537.36 (KHTML, like Gecko) "
     + "Chrome/65.0.3325.181 Safari/537.36"
@@ -27,12 +29,17 @@ class Client:  # pylint: disable=too-few-public-methods
     """Define the client."""
 
     def __init__(
-        self, zip_code: str, *, session: Optional[ClientSession] = None
+        self,
+        zip_code: str,
+        *,
+        session: Optional[ClientSession] = None,
+        request_timeout: int = DEFAULT_TIMEOUT,
     ) -> None:
         """Initialize."""
         if not is_valid_zip_code(zip_code):
             raise InvalidZipError(f"Invalid ZIP code: {zip_code}")
 
+        self._request_timeout = request_timeout
         self._session: ClientSession = session
         self.zip_code: str = zip_code
 
@@ -66,10 +73,10 @@ class Client:  # pylint: disable=too-few-public-methods
         if use_running_session:
             session = self._session
         else:
-            session = ClientSession(timeout=ClientTimeout(total=DEFAULT_TIMEOUT))
+            session = ClientSession()
 
         try:
-            async with session.request(
+            async with timeout(self._request_timeout), session.request(
                 method,
                 f"{url}/{self.zip_code}",
                 headers=_headers,
@@ -77,10 +84,10 @@ class Client:  # pylint: disable=too-few-public-methods
                 json=json,
             ) as resp:
                 resp.raise_for_status()
-                data: dict = await resp.json(content_type=None)
+                data = await resp.json(content_type=None)
                 return data
-        except ClientError as err:
-            raise RequestError(f"Error requesting data from {url}: {err}")
+        except (asyncio.exceptions.TimeoutError, ClientError) as err:
+            raise RequestError(f"Error requesting data from {url}") from err
         finally:
             if not use_running_session:
                 await session.close()
