@@ -5,7 +5,7 @@ from urllib.parse import urlparse
 
 from aiohttp import ClientSession
 from aiohttp.client_exceptions import ClientError
-from async_request_timeout import timeout
+from async_request import timeout
 
 from .allergens import Allergens
 from .asthma import Asthma
