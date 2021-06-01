@@ -7,7 +7,7 @@ class Asthma:  # pylint: disable=too-few-public-methods
 
     def __init__(self, request: Callable[..., Awaitable[dict]]) -> None:
         """Initialize."""
-        self._request: Callable[..., Awaitable[dict]] = request
+        self._request = request
 
     async def current(self) -> dict:
         """Get current asthma info."""
