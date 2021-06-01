@@ -1,4 +1,7 @@
 """Define tests for the client object."""
+import asyncio
+from unittest.mock import patch
+
 import aiohttp
 import pytest
 
@@ -18,21 +21,15 @@ async def test_create():
 
 @pytest.mark.asyncio
 async def test_bad_zip():
-    """Test attempting to create a client with a bad ZIP code."""
+    """Test creating a client with a bad ZIP code."""
     with pytest.raises(InvalidZipError):
         async with aiohttp.ClientSession() as session:
             _ = Client(TEST_BAD_ZIP, session=session)
 
 
 @pytest.mark.asyncio
-async def test_request_error(aresponses):
-    """Test authenticating the device."""
-    aresponses.add(
-        "www.pollen.com",
-        f"/api/bad_endpoint/{TEST_ZIP}",
-        "get",
-        aresponses.Response(text="", status=404),
-    )
+async def test_http_error(aresponses):
+    """Test an HTTP error."""
     aresponses.add(
         "www.pollen.com",
         f"/api/forecast/outlook/{TEST_ZIP}",
@@ -43,5 +40,15 @@ async def test_request_error(aresponses):
     with pytest.raises(RequestError):
         async with aiohttp.ClientSession() as session:
             client = Client(TEST_ZIP, session=session)
-            await client._request("get", "https://www.pollen.com/api/bad_endpoint")
+            await client.allergens.outlook()
+
+
+@pytest.mark.asyncio
+async def test_request_timeout():
+    """Test a request timeout."""
+    with patch(
+        "aiohttp.ClientSession.request", side_effect=asyncio.exceptions.TimeoutError
+    ), pytest.raises(RequestError):
+        async with aiohttp.ClientSession() as session:
+            client = Client(TEST_ZIP, session=session)
             await client.allergens.outlook()

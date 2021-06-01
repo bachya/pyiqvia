@@ -1,16 +1,18 @@
 """Define a client to interact with Pollen.com."""
+import asyncio
 from typing import Optional
 from urllib.parse import urlparse
 
-from aiohttp import ClientSession, ClientTimeout
+from aiohttp import ClientSession
 from aiohttp.client_exceptions import ClientError
+from async_timeout import timeout
 
 from .allergens import Allergens
 from .asthma import Asthma
 from .disease import Disease
 from .errors import InvalidZipError, RequestError
 
-DEFAULT_TIMEOUT = 10
+DEFAULT_TIMEOUT = 3
 DEFAULT_USER_AGENT = (
     "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_4) "
     + "AppleWebKit/537.36 (KHTML, like Gecko) "
@@ -27,13 +29,18 @@ class Client:  # pylint: disable=too-few-public-methods
     """Define the client."""
 
     def __init__(
-        self, zip_code: str, *, session: Optional[ClientSession] = None
+        self,
+        zip_code: str,
+        *,
+        session: Optional[ClientSession] = None,
+        timeout: int = DEFAULT_TIMEOUT,
     ) -> None:
         """Initialize."""
         if not is_valid_zip_code(zip_code):
             raise InvalidZipError(f"Invalid ZIP code: {zip_code}")
 
         self._session: ClientSession = session
+        self._timeout = timeout
         self.zip_code = zip_code
 
         self.allergens = Allergens(self._request)
@@ -66,10 +73,10 @@ class Client:  # pylint: disable=too-few-public-methods
         if use_running_session:
             session = self._session
         else:
-            session = ClientSession(timeout=ClientTimeout(total=DEFAULT_TIMEOUT))
+            session = ClientSession()
 
         try:
-            async with session.request(
+            async with timeout(self._timeout), session.request(
                 method,
                 f"{url}/{self.zip_code}",
                 headers=_headers,
@@ -80,7 +87,9 @@ class Client:  # pylint: disable=too-few-public-methods
                 data = await resp.json(content_type=None)
                 return data
         except ClientError as err:
-            raise RequestError(f"Error requesting data from {url}: {err}")
+            raise RequestError(f"Error requesting data from {url}: {err}") from err
+        except asyncio.exceptions.TimeoutError:
+            raise RequestError(f"Timed out while requesting {url}")
         finally:
             if not use_running_session:
                 await session.close()
