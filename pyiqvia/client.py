@@ -33,7 +33,7 @@ class Client:  # pylint: disable=too-few-public-methods
         zip_code: str,
         *,
         session: Optional[ClientSession] = None,
-        request_timeout: int = DEFAULT_TIMEOUT
+        request_timeout: int = DEFAULT_TIMEOUT,
     ) -> None:
         """Initialize."""
         if not is_valid_zip_code(zip_code):
