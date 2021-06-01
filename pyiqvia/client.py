@@ -1,6 +1,6 @@
 """Define a client to interact with Pollen.com."""
 from typing import Optional
-from urllib.parse import ParseResult, urlparse
+from urllib.parse import urlparse
 
 from aiohttp import ClientSession, ClientTimeout
 from aiohttp.client_exceptions import ClientError
@@ -10,8 +10,8 @@ from .asthma import Asthma
 from .disease import Disease
 from .errors import InvalidZipError, RequestError
 
-DEFAULT_TIMEOUT: int = 10
-DEFAULT_USER_AGENT: str = (
+DEFAULT_TIMEOUT = 10
+DEFAULT_USER_AGENT = (
     "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_4) "
     + "AppleWebKit/537.36 (KHTML, like Gecko) "
     + "Chrome/65.0.3325.181 Safari/537.36"
@@ -34,11 +34,11 @@ class Client:  # pylint: disable=too-few-public-methods
             raise InvalidZipError(f"Invalid ZIP code: {zip_code}")
 
         self._session: ClientSession = session
-        self.zip_code: str = zip_code
+        self.zip_code = zip_code
 
-        self.allergens: Allergens = Allergens(self._request)
-        self.asthma: Asthma = Asthma(self._request)
-        self.disease: Disease = Disease(self._request)
+        self.allergens = Allergens(self._request)
+        self.asthma = Asthma(self._request)
+        self.disease = Disease(self._request)
 
     async def _request(
         self,
@@ -50,7 +50,7 @@ class Client:  # pylint: disable=too-few-public-methods
         json: Optional[dict] = None,
     ) -> dict:
         """Make a request against AirVisual."""
-        pieces: ParseResult = urlparse(url)
+        pieces = urlparse(url)
 
         _headers = headers or {}
         _headers.update(
@@ -77,7 +77,7 @@ class Client:  # pylint: disable=too-few-public-methods
                 json=json,
             ) as resp:
                 resp.raise_for_status()
-                data: dict = await resp.json(content_type=None)
+                data = await resp.json(content_type=None)
                 return data
         except ClientError as err:
             raise RequestError(f"Error requesting data from {url}: {err}")
