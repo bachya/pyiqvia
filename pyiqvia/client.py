@@ -4,14 +4,16 @@ from typing import Optional
 from urllib.parse import urlparse
 
 from aiohttp import ClientSession
-from aiohttp.client_exceptions import ClientError
 from async_timeout import timeout
 
 from .allergens import Allergens
 from .asthma import Asthma
+from .const import LOGGER
 from .disease import Disease
 from .errors import InvalidZipError, RequestError
 
+DEFAULT_REQUEST_RETRY_INTERVAL = 3
+DEFAULT_RETRIES = 3
 DEFAULT_TIMEOUT = 3
 DEFAULT_USER_AGENT = (
     "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_4) "
@@ -32,15 +34,19 @@ class Client:  # pylint: disable=too-few-public-methods
         self,
         zip_code: str,
         *,
-        session: Optional[ClientSession] = None,
+        request_retries: int = DEFAULT_RETRIES,
+        request_retry_interval: int = DEFAULT_REQUEST_RETRY_INTERVAL,
         request_timeout: int = DEFAULT_TIMEOUT,
+        session: Optional[ClientSession] = None,
     ) -> None:
         """Initialize."""
         if not is_valid_zip_code(zip_code):
             raise InvalidZipError(f"Invalid ZIP code: {zip_code}")
 
-        self._session: ClientSession = session
+        self._request_retries = request_retries
+        self._request_retry_interval = request_retry_interval
         self._request_timeout = request_timeout
+        self._session: ClientSession = session
         self.zip_code = zip_code
 
         self.allergens = Allergens(self._request)
@@ -75,21 +81,35 @@ class Client:  # pylint: disable=too-few-public-methods
         else:
             session = ClientSession()
 
-        try:
-            async with timeout(self._request_timeout), session.request(
-                method,
-                f"{url}/{self.zip_code}",
-                headers=_headers,
-                params=params,
-                json=json,
-            ) as resp:
-                resp.raise_for_status()
-                data = await resp.json(content_type=None)
-                return data
-        except ClientError as err:
-            raise RequestError(f"Error requesting data from {url}: {err}") from err
-        except asyncio.exceptions.TimeoutError as err:
-            raise RequestError(f"Timed out while requesting {url}") from err
-        finally:
-            if not use_running_session:
-                await session.close()
+        retry = 0
+
+        while retry < self._request_retries:
+            try:
+                async with timeout(self._request_timeout), session.request(
+                    method,
+                    f"{url}/{self.zip_code}",
+                    headers=_headers,
+                    params=params,
+                    json=json,
+                ) as resp:
+                    resp.raise_for_status()
+                    data = await resp.json(content_type=None)
+
+                    LOGGER.debug("Received data for %s: %s", url, data)
+
+                    return data
+            except Exception as err:  # pylint: disable=broad-except
+                LOGGER.warning(
+                    "Error while requesting %s: %s (attempt %s of %s)",
+                    url,
+                    err,
+                    retry + 1,
+                    self._request_retries,
+                )
+                retry += 1
+                await asyncio.sleep(self._request_retry_interval)
+            finally:
+                if not use_running_session:
+                    await session.close()
+
+        raise RequestError(f"Requesting {url} failed after {retry} tries") from None
