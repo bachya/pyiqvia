@@ -1,5 +1,5 @@
 """Define an object to work with "Disease" endpoints."""
-from typing import Awaitable, Callable
+from typing import Any, Awaitable, Callable, Dict
 
 
 class Disease:  # pylint: disable=too-few-public-methods
@@ -9,19 +9,19 @@ class Disease:  # pylint: disable=too-few-public-methods
         """Initialize."""
         self._request = request
 
-    async def current(self) -> dict:
+    async def current(self) -> Dict[str, Any]:
         """Get current disease info."""
         return await self._request(
             "get", "https://flustar.com/api/forecast/current/cold"
         )
 
-    async def extended(self) -> dict:
+    async def extended(self) -> Dict[str, Any]:
         """Get extended disease info."""
         return await self._request(
             "get", "https://www.pollen.com/api/forecast/extended/cold"
         )
 
-    async def historic(self) -> dict:
+    async def historic(self) -> Dict[str, Any]:
         """Get historic disease info."""
         return await self._request(
             "get", "https://flustar.com/api/forecast/historic/cold"

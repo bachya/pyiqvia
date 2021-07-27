@@ -1,5 +1,5 @@
 """Define an object to work with "Allergens" endpoints."""
-from typing import Awaitable, Callable
+from typing import Any, Awaitable, Callable, Dict
 
 
 class Allergens:
@@ -9,24 +9,24 @@ class Allergens:
         """Initialize."""
         self._request = request
 
-    async def current(self) -> dict:
+    async def current(self) -> Dict[str, Any]:
         """Get current allergy conditions."""
         return await self._request(
             "get", "https://www.pollen.com/api/forecast/current/pollen"
         )
 
-    async def extended(self) -> dict:
+    async def extended(self) -> Dict[str, Any]:
         """Get extended allergen info."""
         return await self._request(
             "get", "https://www.pollen.com/api/forecast/extended/pollen"
         )
 
-    async def historic(self) -> dict:
+    async def historic(self) -> Dict[str, Any]:
         """Get historic allergen info."""
         return await self._request(
             "get", "https://www.pollen.com/api/forecast/historic/pollen"
         )
 
-    async def outlook(self) -> dict:
+    async def outlook(self) -> Dict[str, Any]:
         """Get allergen outlook."""
         return await self._request("get", "https://www.pollen.com/api/forecast/outlook")

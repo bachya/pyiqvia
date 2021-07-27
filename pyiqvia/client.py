@@ -27,7 +27,7 @@ def is_valid_zip_code(zip_code: str) -> bool:
     return len(zip_code) == 5 and zip_code.isdigit()
 
 
-class Client:  # pylint: disable=too-few-public-methods
+class Client:  # pylint: disable=too-few-public-methods,too-many-instance-attributes
     """Define the client."""
 
     def __init__(
@@ -53,7 +53,9 @@ class Client:  # pylint: disable=too-few-public-methods
         self.asthma = Asthma(self._request)
         self.disease = Disease(self._request)
 
-    async def _request(self, method: str, url: str, **kwargs: Dict[str, Any]) -> dict:
+    async def _request(
+        self, method: str, url: str, **kwargs: Dict[str, Any]
+    ) -> Dict[str, Any]:
         """Make a request against AirVisual."""
         pieces = urlparse(url)
         kwargs.setdefault("headers", {})
