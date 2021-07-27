@@ -1,6 +1,6 @@
 """Define a client to interact with Pollen.com."""
 import asyncio
-from typing import Optional
+from typing import Any, Dict, Optional, cast
 from urllib.parse import urlparse
 
 from aiohttp import ClientSession
@@ -27,7 +27,7 @@ def is_valid_zip_code(zip_code: str) -> bool:
     return len(zip_code) == 5 and zip_code.isdigit()
 
 
-class Client:  # pylint: disable=too-few-public-methods
+class Client:  # pylint: disable=too-few-public-methods,too-many-instance-attributes
     """Define the client."""
 
     def __init__(
@@ -46,7 +46,7 @@ class Client:  # pylint: disable=too-few-public-methods
         self._request_retries = request_retries
         self._request_retry_interval = request_retry_interval
         self._request_timeout = request_timeout
-        self._session: ClientSession = session
+        self._session = session
         self.zip_code = zip_code
 
         self.allergens = Allergens(self._request)
@@ -54,19 +54,12 @@ class Client:  # pylint: disable=too-few-public-methods
         self.disease = Disease(self._request)
 
     async def _request(
-        self,
-        method: str,
-        url: str,
-        *,
-        headers: Optional[dict] = None,
-        params: Optional[dict] = None,
-        json: Optional[dict] = None,
-    ) -> dict:
+        self, method: str, url: str, **kwargs: Dict[str, Any]
+    ) -> Dict[str, Any]:
         """Make a request against AirVisual."""
         pieces = urlparse(url)
-
-        _headers = headers or {}
-        _headers.update(
+        kwargs.setdefault("headers", {})
+        kwargs["headers"].update(
             {
                 "Content-Type": "application/json",
                 "Referer": f"{pieces.scheme}://{pieces.netloc}",
@@ -81,23 +74,17 @@ class Client:  # pylint: disable=too-few-public-methods
         else:
             session = ClientSession()
 
-        retry = 0
+        assert session
 
+        retry = 0
         while retry < self._request_retries:
             try:
                 async with timeout(self._request_timeout), session.request(
-                    method,
-                    f"{url}/{self.zip_code}",
-                    headers=_headers,
-                    params=params,
-                    json=json,
+                    method, f"{url}/{self.zip_code}", **kwargs
                 ) as resp:
                     resp.raise_for_status()
-                    data = await resp.json(content_type=None)
-
-                    LOGGER.debug("Received data for %s: %s", url, data)
-
-                    return data
+                    data = await resp.json()
+                    break
             except Exception as err:  # pylint: disable=broad-except
                 LOGGER.warning(
                     "Error while requesting %s: %s (attempt %s of %s)",
@@ -111,5 +98,9 @@ class Client:  # pylint: disable=too-few-public-methods
             finally:
                 if not use_running_session:
                     await session.close()
+        else:
+            raise RequestError(f"Requesting {url} failed after {retry} tries") from None
 
-        raise RequestError(f"Requesting {url} failed after {retry} tries") from None
+        LOGGER.debug("Received data for %s: %s", url, data)
+
+        return cast(Dict[str, Any], data)

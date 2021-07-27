@@ -15,7 +15,9 @@ async def test_current(aresponses):
         f"/api/forecast/current/cold/{TEST_ZIP}",
         "get",
         aresponses.Response(
-            text=load_fixture("disease_current_response.json"), status=200
+            text=load_fixture("disease_current_response.json"),
+            status=200,
+            headers={"Content-Type": "application/json; charset=utf-8"},
         ),
     )
 
@@ -33,7 +35,9 @@ async def test_extended(aresponses):
         f"/api/forecast/extended/cold/{TEST_ZIP}",
         "get",
         aresponses.Response(
-            text=load_fixture("disease_extended_response.json"), status=200
+            text=load_fixture("disease_extended_response.json"),
+            status=200,
+            headers={"Content-Type": "application/json; charset=utf-8"},
         ),
     )
 
@@ -51,7 +55,9 @@ async def test_historic(aresponses):
         f"/api/forecast/historic/cold/{TEST_ZIP}",
         "get",
         aresponses.Response(
-            text=load_fixture("disease_historic_response.json"), status=200
+            text=load_fixture("disease_historic_response.json"),
+            status=200,
+            headers={"Content-Type": "application/json; charset=utf-8"},
         ),
     )
 
