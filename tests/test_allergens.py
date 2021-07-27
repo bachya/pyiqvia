@@ -15,7 +15,9 @@ async def test_current(aresponses):
         f"/api/forecast/current/pollen/{TEST_ZIP}",
         "get",
         aresponses.Response(
-            text=load_fixture("allergens_current_response.json"), status=200
+            text=load_fixture("allergens_current_response.json"),
+            status=200,
+            headers={"Content-Type": "application/json; charset=utf-8"},
         ),
     )
 
@@ -33,7 +35,9 @@ async def test_current_no_explicit_session(aresponses):
         f"/api/forecast/current/pollen/{TEST_ZIP}",
         "get",
         aresponses.Response(
-            text=load_fixture("allergens_current_response.json"), status=200
+            text=load_fixture("allergens_current_response.json"),
+            status=200,
+            headers={"Content-Type": "application/json; charset=utf-8"},
         ),
     )
 
@@ -50,7 +54,9 @@ async def test_extended(aresponses):
         f"/api/forecast/extended/pollen/{TEST_ZIP}",
         "get",
         aresponses.Response(
-            text=load_fixture("allergens_extended_response.json"), status=200
+            text=load_fixture("allergens_extended_response.json"),
+            status=200,
+            headers={"Content-Type": "application/json; charset=utf-8"},
         ),
     )
 
@@ -68,7 +74,9 @@ async def test_historic(aresponses):
         f"/api/forecast/historic/pollen/{TEST_ZIP}",
         "get",
         aresponses.Response(
-            text=load_fixture("allergens_historic_response.json"), status=200
+            text=load_fixture("allergens_historic_response.json"),
+            status=200,
+            headers={"Content-Type": "application/json; charset=utf-8"},
         ),
     )
 
@@ -86,7 +94,9 @@ async def test_outlook(aresponses):
         f"/api/forecast/outlook/{TEST_ZIP}",
         "get",
         aresponses.Response(
-            text=load_fixture("allergens_outlook_response.json"), status=200
+            text=load_fixture("allergens_outlook_response.json"),
+            status=200,
+            headers={"Content-Type": "application/json; charset=utf-8"},
         ),
     )
 

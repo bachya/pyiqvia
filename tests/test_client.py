@@ -72,7 +72,9 @@ async def test_request_retry(aresponses):
         f"/api/forecast/outlook/{TEST_ZIP}",
         "get",
         aresponses.Response(
-            text=load_fixture("allergens_outlook_response.json"), status=200
+            text=load_fixture("allergens_outlook_response.json"),
+            status=200,
+            headers={"Content-Type": "application/json; charset=utf-8"},
         ),
     )
 
