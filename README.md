@@ -79,6 +79,29 @@ async def main() -> None:
 asyncio.run(main())
 ```
 
+## Retries
+
+By default, `pyopenuv` will retry appropriate errors 3 times (with an interval of 3 seconds
+in-between). This logic can be changed by passing different values for `request_retries`
+and `request_retry_interval` to the `Client` constructor:
+
+```python
+import asyncio
+
+from pyiqvia import Client
+
+
+async def main():
+    client = Client("80012", request_retries=5, request_retry_interval=10)
+
+    # ...
+
+
+asyncio.run(main())
+```
+
+## Connection Pooling
+
 By default, the library creates a new connection to IQVIA with each coroutine. If you
 are calling a large number of coroutines (or merely want to squeeze out every second of
 runtime savings possible), an
