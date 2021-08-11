@@ -1,10 +1,12 @@
-"""Define a client to interact with Pollen.com."""
+"""Define a client to interact with IQVIA."""
 import asyncio
+import sys
 from typing import Any, Dict, Optional, cast
 from urllib.parse import urlparse
 
-from aiohttp import ClientSession
-from async_timeout import timeout
+from aiohttp import ClientSession, ClientTimeout
+from aiohttp.client_exceptions import ClientError
+import backoff
 
 from .allergens import Allergens
 from .asthma import Asthma
@@ -27,7 +29,7 @@ def is_valid_zip_code(zip_code: str) -> bool:
     return len(zip_code) == 5 and zip_code.isdigit()
 
 
-class Client:  # pylint: disable=too-few-public-methods,too-many-instance-attributes
+class Client:  # pylint: disable=too-few-public-methods
     """Define the client."""
 
     def __init__(
@@ -36,71 +38,61 @@ class Client:  # pylint: disable=too-few-public-methods,too-many-instance-attrib
         *,
         request_retries: int = DEFAULT_RETRIES,
         request_retry_interval: int = DEFAULT_REQUEST_RETRY_INTERVAL,
-        request_timeout: int = DEFAULT_TIMEOUT,
         session: Optional[ClientSession] = None,
     ) -> None:
         """Initialize."""
         if not is_valid_zip_code(zip_code):
             raise InvalidZipError(f"Invalid ZIP code: {zip_code}")
 
-        self._request_retries = request_retries
-        self._request_retry_interval = request_retry_interval
-        self._request_timeout = request_timeout
         self._session = session
         self.zip_code = zip_code
 
-        self.allergens = Allergens(self._request)
-        self.asthma = Asthma(self._request)
-        self.disease = Disease(self._request)
+        # Implement a version of the request coroutine, but with backoff/retry logic:
+        self.async_request = backoff.on_exception(
+            backoff.constant,
+            (asyncio.TimeoutError, ClientError),
+            interval=request_retry_interval,
+            logger=LOGGER,
+            max_tries=request_retries,
+            on_giveup=self._handle_on_giveup,
+        )(self._async_request)
 
-    async def _request(
+        self.allergens = Allergens(self.async_request)
+        self.asthma = Asthma(self.async_request)
+        self.disease = Disease(self.async_request)
+
+    async def _async_request(
         self, method: str, url: str, **kwargs: Dict[str, Any]
     ) -> Dict[str, Any]:
-        """Make a request against AirVisual."""
-        pieces = urlparse(url)
+        """Make a request against the IQVIA API."""
+        url_pieces = urlparse(url)
         kwargs.setdefault("headers", {})
-        kwargs["headers"].update(
-            {
-                "Content-Type": "application/json",
-                "Referer": f"{pieces.scheme}://{pieces.netloc}",
-                "User-Agent": DEFAULT_USER_AGENT,
-            }
-        )
+        kwargs["headers"]["Content-Type"] = "application/json"
+        kwargs["headers"]["Referer"] = f"{url_pieces.scheme}://{url_pieces.netloc}"
+        kwargs["headers"]["User-Agent"] = DEFAULT_USER_AGENT
 
         use_running_session = self._session and not self._session.closed
 
         if use_running_session:
             session = self._session
         else:
-            session = ClientSession()
+            session = ClientSession(timeout=ClientTimeout(total=DEFAULT_TIMEOUT))
 
         assert session
 
-        retry = 0
-        while retry < self._request_retries:
-            try:
-                async with timeout(self._request_timeout), session.request(
-                    method, f"{url}/{self.zip_code}", **kwargs
-                ) as resp:
-                    resp.raise_for_status()
-                    data = await resp.json()
-                    break
-            except Exception as err:  # pylint: disable=broad-except
-                LOGGER.warning(
-                    "Error while requesting %s: %s (attempt %s of %s)",
-                    url,
-                    err,
-                    retry + 1,
-                    self._request_retries,
-                )
-                retry += 1
-                await asyncio.sleep(self._request_retry_interval)
-            finally:
-                if not use_running_session:
-                    await session.close()
-        else:
-            raise RequestError(f"Requesting {url} failed after {retry} tries") from None
+        async with session.request(method, f"{url}/{self.zip_code}", **kwargs) as resp:
+            resp.raise_for_status()
+            data = await resp.json()
+
+        if not use_running_session:
+            await session.close()
 
         LOGGER.debug("Received data for %s: %s", url, data)
 
         return cast(Dict[str, Any], data)
+
+    def _handle_on_giveup(self, _: Dict[str, Any]) -> None:
+        """Wrap a giveup exception as a RequestError."""
+        err_info = sys.exc_info()
+        err = err_info[1].with_traceback(err_info[2])  # type: ignore
+        raise RequestError(err) from err
