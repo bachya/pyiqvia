@@ -14,8 +14,7 @@ from .const import LOGGER
 from .disease import Disease
 from .errors import InvalidZipError, RequestError
 
-DEFAULT_REQUEST_RETRY_INTERVAL = 3
-DEFAULT_RETRIES = 3
+DEFAULT_RETRIES = 4
 DEFAULT_TIMEOUT = 3
 DEFAULT_USER_AGENT = (
     "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_4) "
@@ -36,9 +35,8 @@ class Client:  # pylint: disable=too-few-public-methods
         self,
         zip_code: str,
         *,
-        request_retries: int = DEFAULT_RETRIES,
-        request_retry_interval: int = DEFAULT_REQUEST_RETRY_INTERVAL,
         session: Optional[ClientSession] = None,
+        request_retries: int = DEFAULT_RETRIES,
     ) -> None:
         """Initialize."""
         if not is_valid_zip_code(zip_code):
@@ -49,9 +47,8 @@ class Client:  # pylint: disable=too-few-public-methods
 
         # Implement a version of the request coroutine, but with backoff/retry logic:
         self.async_request = backoff.on_exception(
-            backoff.constant,
+            backoff.expo,
             (asyncio.TimeoutError, ClientError),
-            interval=request_retry_interval,
             logger=LOGGER,
             max_tries=request_retries,
             on_giveup=self._handle_on_giveup,
