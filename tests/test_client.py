@@ -39,9 +39,7 @@ async def test_http_error(aresponses):
 
     with pytest.raises(RequestError):
         async with aiohttp.ClientSession() as session:
-            client = Client(
-                TEST_ZIP, session=session, request_retries=1, request_retry_interval=0
-            )
+            client = Client(TEST_ZIP, session=session, request_retries=1)
             await client.allergens.outlook()
 
 
@@ -52,9 +50,7 @@ async def test_request_timeout():
         "aiohttp.ClientSession.request", side_effect=asyncio.exceptions.TimeoutError
     ), pytest.raises(RequestError):
         async with aiohttp.ClientSession() as session:
-            client = Client(
-                TEST_ZIP, session=session, request_retries=1, request_retry_interval=0
-            )
+            client = Client(TEST_ZIP, session=session, request_retries=1)
             await client.allergens.outlook()
 
 
@@ -79,7 +75,5 @@ async def test_request_retry(aresponses):
     )
 
     async with aiohttp.ClientSession() as session:
-        client = Client(
-            TEST_ZIP, session=session, request_retries=2, request_retry_interval=0
-        )
+        client = Client(TEST_ZIP, session=session)
         await client.allergens.outlook()

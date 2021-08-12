@@ -81,9 +81,9 @@ asyncio.run(main())
 
 ## Retries
 
-By default, `pyopenuv` will retry appropriate errors 3 times (with an interval of 3 seconds
-in-between). This logic can be changed by passing different values for `request_retries`
-and `request_retry_interval` to the `Client` constructor:
+By default, `pyiqvia` will retry appropriate errors 4 times (with an exponentially
+increasing delay in-between). This logic can be changed by passing a different value for
+`request_retries` to the `Client` constructor:
 
 ```python
 import asyncio
@@ -92,7 +92,7 @@ from pyiqvia import Client
 
 
 async def main():
-    client = Client("80012", request_retries=5, request_retry_interval=10)
+    client = Client("80012", request_retries=5)
 
     # ...
 
