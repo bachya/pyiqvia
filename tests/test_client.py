@@ -28,6 +28,7 @@ async def test_bad_zip():
             _ = Client(TEST_BAD_ZIP, session=session)
 
 
+@pytest.mark.asyncio
 async def test_custom_logger(aresponses, caplog):
     """Test that a custom logger is used when provided to the client."""
     caplog.set_level(logging.DEBUG)
