@@ -1,5 +1,6 @@
 """Define tests for the client object."""
 import asyncio
+import logging
 from unittest.mock import patch
 
 import aiohttp
@@ -25,6 +26,31 @@ async def test_bad_zip():
     with pytest.raises(InvalidZipError):
         async with aiohttp.ClientSession() as session:
             _ = Client(TEST_BAD_ZIP, session=session)
+
+
+async def test_custom_logger(aresponses, caplog):
+    """Test that a custom logger is used when provided to the client."""
+    caplog.set_level(logging.DEBUG)
+    custom_logger = logging.getLogger("custom")
+
+    aresponses.add(
+        "www.pollen.com",
+        f"/api/forecast/current/pollen/{TEST_ZIP}",
+        "get",
+        aresponses.Response(
+            text=load_fixture("allergens_current_response.json"),
+            status=200,
+            headers={"Content-Type": "application/json; charset=utf-8"},
+        ),
+    )
+
+    async with aiohttp.ClientSession() as session:
+        client = Client(TEST_ZIP, session=session, logger=custom_logger)
+        await client.allergens.current()
+        assert any(
+            record.name == "custom" and "Received data" in record.message
+            for record in caplog.records
+        )
 
 
 @pytest.mark.asyncio
