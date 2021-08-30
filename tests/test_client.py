@@ -13,19 +13,19 @@ from .common import TEST_BAD_ZIP, TEST_ZIP, load_fixture
 
 
 @pytest.mark.asyncio
-async def test_create():
-    """Test the creation of a client."""
-    async with aiohttp.ClientSession() as session:
-        client = Client(TEST_ZIP, session=session)
-        assert client.zip_code == TEST_ZIP
-
-
-@pytest.mark.asyncio
 async def test_bad_zip():
     """Test creating a client with a bad ZIP code."""
     with pytest.raises(InvalidZipError):
         async with aiohttp.ClientSession() as session:
             _ = Client(TEST_BAD_ZIP, session=session)
+
+
+@pytest.mark.asyncio
+async def test_create():
+    """Test the creation of a client."""
+    async with aiohttp.ClientSession() as session:
+        client = Client(TEST_ZIP, session=session)
+        assert client.zip_code == TEST_ZIP
 
 
 @pytest.mark.asyncio
