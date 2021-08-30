@@ -1,5 +1,6 @@
 """Define a client to interact with IQVIA."""
 import asyncio
+import logging
 import sys
 from typing import Any, Dict, Optional, cast
 from urllib.parse import urlparse
@@ -10,9 +11,10 @@ import backoff
 
 from .allergens import Allergens
 from .asthma import Asthma
-from .const import LOGGER
 from .disease import Disease
 from .errors import InvalidZipError, RequestError
+
+_LOGGER = logging.getLogger(__package__)
 
 DEFAULT_RETRIES = 4
 DEFAULT_TIMEOUT = 3
@@ -37,6 +39,7 @@ class Client:  # pylint: disable=too-few-public-methods
         *,
         session: Optional[ClientSession] = None,
         request_retries: int = DEFAULT_RETRIES,
+        logger: Optional[logging.Logger] = None,
     ) -> None:
         """Initialize."""
         if not is_valid_zip_code(zip_code):
@@ -45,11 +48,16 @@ class Client:  # pylint: disable=too-few-public-methods
         self._session = session
         self.zip_code = zip_code
 
+        if logger:
+            self._logger = logger
+        else:
+            self._logger = _LOGGER
+
         # Implement a version of the request coroutine, but with backoff/retry logic:
         self.async_request = backoff.on_exception(
             backoff.expo,
             (asyncio.TimeoutError, ClientError),
-            logger=LOGGER,
+            logger=self._logger,
             max_tries=request_retries,
             on_giveup=self._handle_on_giveup,
         )(self._async_request)
@@ -84,11 +92,12 @@ class Client:  # pylint: disable=too-few-public-methods
         if not use_running_session:
             await session.close()
 
-        LOGGER.debug("Received data for %s: %s", url, data)
+        self._logger.debug("Received data for %s: %s", url, data)
 
         return cast(Dict[str, Any], data)
 
-    def _handle_on_giveup(self, _: Dict[str, Any]) -> None:
+    @staticmethod
+    def _handle_on_giveup(_: Dict[str, Any]) -> None:
         """Wrap a giveup exception as a RequestError."""
         err_info = sys.exc_info()
         err = err_info[1].with_traceback(err_info[2])  # type: ignore
