@@ -1,5 +1,5 @@
 aiohttp>=3.7.4post0
-aresponses==1.1.2
+aresponses==2.0.0
 backoff==1.11.1
 pytest-aiohttp==0.3.0
 pytest-cov==2.8.1
