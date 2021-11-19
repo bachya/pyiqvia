@@ -2,7 +2,7 @@
 import asyncio
 import logging
 import sys
-from typing import Any, Dict, Optional, cast
+from typing import Any, Callable, Dict, Optional, cast
 from urllib.parse import urlparse
 
 from aiohttp import ClientSession, ClientTimeout
@@ -45,6 +45,7 @@ class Client:  # pylint: disable=too-few-public-methods
         if not is_valid_zip_code(zip_code):
             raise InvalidZipError(f"Invalid ZIP code: {zip_code}")
 
+        self._request_retries = request_retries
         self._session = session
         self.zip_code = zip_code
 
@@ -53,18 +54,11 @@ class Client:  # pylint: disable=too-few-public-methods
         else:
             self._logger = _LOGGER
 
-        # Implement a version of the request coroutine, but with backoff/retry logic:
-        self.async_request = backoff.on_exception(
-            backoff.expo,
-            (asyncio.TimeoutError, ClientError),
-            logger=self._logger,
-            max_tries=request_retries,
-            on_giveup=self._handle_on_giveup,
-        )(self._async_request)
+        self.async_request = self._wrap_request_method(self._request_retries)
 
-        self.allergens = Allergens(self.async_request)
-        self.asthma = Asthma(self.async_request)
-        self.disease = Disease(self.async_request)
+        self.allergens = Allergens(self)
+        self.asthma = Asthma(self)
+        self.disease = Disease(self)
 
     async def _async_request(
         self, method: str, url: str, **kwargs: Dict[str, Any]
@@ -102,3 +96,21 @@ class Client:  # pylint: disable=too-few-public-methods
         err_info = sys.exc_info()
         err = err_info[1].with_traceback(err_info[2])  # type: ignore
         raise RequestError(err) from err
+
+    def _wrap_request_method(self, request_retries: int) -> Callable:
+        """Wrap the request method in backoff/retry logic."""
+        return backoff.on_exception(
+            backoff.expo,
+            (asyncio.TimeoutError, ClientError),
+            logger=self._logger,
+            max_tries=request_retries,
+            on_giveup=self._handle_on_giveup,
+        )(self._async_request)
+
+    def disable_request_retries(self) -> None:
+        """Disable the request retry mechanism."""
+        self.async_request = self._wrap_request_method(1)
+
+    def enable_request_retries(self) -> None:
+        """Enable the request retry mechanism."""
+        self.async_request = self._wrap_request_method(self._request_retries)
