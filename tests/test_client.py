@@ -53,6 +53,8 @@ async def test_custom_logger(aresponses, caplog):
             for record in caplog.records
         )
 
+    aresponses.assert_plan_strictly_followed()
+
 
 @pytest.mark.asyncio
 async def test_http_error(aresponses):
@@ -69,6 +71,8 @@ async def test_http_error(aresponses):
             client = Client(TEST_ZIP, session=session, request_retries=1)
             await client.allergens.outlook()
 
+    aresponses.assert_plan_strictly_followed()
+
 
 @pytest.mark.asyncio
 async def test_request_timeout():
@@ -82,8 +86,14 @@ async def test_request_timeout():
 
 
 @pytest.mark.asyncio
-async def test_request_retry(aresponses):
-    """Test that request retries work."""
+async def test_request_retries(aresponses):
+    """Test the request retry logic."""
+    aresponses.add(
+        "www.pollen.com",
+        f"/api/forecast/outlook/{TEST_ZIP}",
+        "get",
+        aresponses.Response(text="", status=500),
+    )
     aresponses.add(
         "www.pollen.com",
         f"/api/forecast/outlook/{TEST_ZIP}",
@@ -103,4 +113,14 @@ async def test_request_retry(aresponses):
 
     async with aiohttp.ClientSession() as session:
         client = Client(TEST_ZIP, session=session)
+
+        client.disable_request_retries()
+
+        with pytest.raises(RequestError):
+            await client.allergens.outlook()
+
+        client.enable_request_retries()
+
         await client.allergens.outlook()
+
+    aresponses.assert_plan_strictly_followed()
