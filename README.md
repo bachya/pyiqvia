@@ -9,7 +9,7 @@
 [![Say Thanks](https://img.shields.io/badge/SayThanks-!-1EAEDB.svg)](https://saythanks.io/to/bachya)
 
 `pyiqvia` is an async-focused Python3 library for allergen, asthma, and disease
-data from the [IQVIA™](https://www.iqvia.com) family of websites (such as 
+data from the [IQVIA™](https://www.iqvia.com) family of websites (such as
 https://pollen.com, https://flustar.com, and more).
 
 - [Python Versions](#python-versions)
