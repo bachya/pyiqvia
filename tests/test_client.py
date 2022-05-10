@@ -78,7 +78,7 @@ async def test_http_error(aresponses):
 async def test_request_timeout():
     """Test a request timeout."""
     with patch(
-        "aiohttp.ClientSession.request", side_effect=asyncio.exceptions.TimeoutError
+        "aiohttp.ClientSession.request", side_effect=asyncio.TimeoutError
     ), pytest.raises(RequestError):
         async with aiohttp.ClientSession() as session:
             client = Client(TEST_ZIP, session=session, request_retries=1)
