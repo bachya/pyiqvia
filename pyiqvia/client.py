@@ -2,7 +2,7 @@
 import asyncio
 import logging
 import sys
-from typing import Any, Callable, Dict, Optional, cast
+from typing import Any, Awaitable, Callable, Dict, Optional, cast
 from urllib.parse import urlparse
 
 from aiohttp import ClientSession, ClientTimeout
@@ -99,13 +99,16 @@ class Client:  # pylint: disable=too-few-public-methods
 
     def _wrap_request_method(self, request_retries: int) -> Callable:
         """Wrap the request method in backoff/retry logic."""
-        return backoff.on_exception(
-            backoff.expo,
-            (asyncio.TimeoutError, ClientError),
-            logger=self._logger,
-            max_tries=request_retries,
-            on_giveup=self._handle_on_giveup,
-        )(self._async_request)
+        return cast(
+            Callable[..., Awaitable[Dict[str, Any]]],
+            backoff.on_exception(
+                backoff.expo,
+                (asyncio.TimeoutError, ClientError),
+                logger=self._logger,
+                max_tries=request_retries,
+                on_giveup=self._handle_on_giveup,
+            )(self._async_request),
+        )
 
     def disable_request_retries(self) -> None:
         """Disable the request retry mechanism."""
