@@ -1,5 +1,5 @@
 """Define an object to work with allergy endpoints."""
-from typing import TYPE_CHECKING, Any, Dict
+from typing import TYPE_CHECKING, Any, Dict, cast
 
 if TYPE_CHECKING:
     from .client import Client
@@ -14,24 +14,28 @@ class Allergens:
 
     async def current(self) -> Dict[str, Any]:
         """Get current allergy conditions."""
-        return await self._client.async_request(
+        data = await self._client.async_request(
             "get", "https://www.pollen.com/api/forecast/current/pollen"
         )
+        return cast(Dict[str, Any], data)
 
     async def extended(self) -> Dict[str, Any]:
         """Get extended allergen info."""
-        return await self._client.async_request(
+        data = await self._client.async_request(
             "get", "https://www.pollen.com/api/forecast/extended/pollen"
         )
+        return cast(Dict[str, Any], data)
 
     async def historic(self) -> Dict[str, Any]:
         """Get historic allergen info."""
-        return await self._client.async_request(
+        data = await self._client.async_request(
             "get", "https://www.pollen.com/api/forecast/historic/pollen"
         )
+        return cast(Dict[str, Any], data)
 
     async def outlook(self) -> Dict[str, Any]:
         """Get allergen outlook."""
-        return await self._client.async_request(
+        data = await self._client.async_request(
             "get", "https://www.pollen.com/api/forecast/outlook"
         )
+        return cast(Dict[str, Any], data)
