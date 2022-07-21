@@ -8,6 +8,8 @@
 [![Maintainability](https://api.codeclimate.com/v1/badges/3bf37f9cabf73b5d991e/maintainability)](https://codeclimate.com/github/bachya/pyiqvia/maintainability)
 [![Say Thanks](https://img.shields.io/badge/SayThanks-!-1EAEDB.svg)](https://saythanks.io/to/bachya)
 
+<a href="https://www.buymeacoffee.com/bachya1208P" target="_blank"><img src="https://cdn.buymeacoffee.com/buttons/default-orange.png" alt="Buy Me A Coffee" height="41" width="174"></a>
+
 `pyiqvia` is an async-focused Python3 library for allergen, asthma, and disease
 data from the [IQVIA™](https://www.iqvia.com) family of websites (such as
 https://pollen.com, https://flustar.com, and more).
