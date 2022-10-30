@@ -1,5 +1,7 @@
 """Define an object to work with disease endpoints."""
-from typing import TYPE_CHECKING, Any, Dict, cast
+from __future__ import annotations
+
+from typing import TYPE_CHECKING, Any
 
 if TYPE_CHECKING:
     from .client import Client
@@ -8,27 +10,40 @@ if TYPE_CHECKING:
 class Disease:
     """Define the "Disease" object."""
 
-    def __init__(self, client: "Client") -> None:
-        """Initialize."""
+    def __init__(self, client: Client) -> None:
+        """Initialize.
+
+        Args:
+            client: The Client object.
+        """
         self._client = client
 
-    async def current(self) -> Dict[str, Any]:
-        """Get current disease info."""
-        data = await self._client.async_request(
+    async def current(self) -> dict[str, Any]:
+        """Get current disease info.
+
+        Returns:
+            An API response payload.
+        """
+        return await self._client.async_request(
             "get", "https://flustar.com/api/forecast/current/cold"
         )
-        return cast(Dict[str, Any], data)
 
-    async def extended(self) -> Dict[str, Any]:
-        """Get extended disease info."""
-        data = await self._client.async_request(
+    async def extended(self) -> dict[str, Any]:
+        """Get extended disease info.
+
+        Returns:
+            An API response payload.
+        """
+        return await self._client.async_request(
             "get", "https://www.pollen.com/api/forecast/extended/cold"
         )
-        return cast(Dict[str, Any], data)
 
-    async def historic(self) -> Dict[str, Any]:
-        """Get historic disease info."""
-        data = await self._client.async_request(
+    async def historic(self) -> dict[str, Any]:
+        """Get historic disease info.
+
+        Returns:
+            An API response payload.
+        """
+        return await self._client.async_request(
             "get", "https://flustar.com/api/forecast/historic/cold"
         )
-        return cast(Dict[str, Any], data)

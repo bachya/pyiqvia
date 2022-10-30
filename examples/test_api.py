@@ -7,7 +7,7 @@ from pyiqvia import Client
 from pyiqvia.errors import IQVIAError
 
 
-async def main():
+async def main() -> None:
     """Run."""
     async with ClientSession() as session:
         try:
