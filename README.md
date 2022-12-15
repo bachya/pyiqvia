@@ -155,7 +155,7 @@ Thanks to all of [our contributors][contributors] so far!
 [issues]: https://github.com/bachya/pyiqvia/issues
 [license-badge]: https://img.shields.io/pypi/l/pyiqvia.svg
 [license]: https://github.com/bachya/pyiqvia/blob/main/LICENSE
-[maintainability-badge]: https://api.codeclimate.com/v1/badges/bd79edca07c8e4529cba/maintainability
+[maintainability-badge]: https://api.codeclimate.com/v1/badges/3bf37f9cabf73b5d991e/maintainability
 [maintainability]: https://codeclimate.com/github/bachya/pyiqvia/maintainability
 [new-issue]: https://github.com/bachya/pyiqvia/issues/new
 [new-issue]: https://github.com/bachya/pyiqvia/issues/new
