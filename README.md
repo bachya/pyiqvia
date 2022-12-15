@@ -1,18 +1,17 @@
 # 🌻 pyiqvia: A clean, async-focused Python3 API for IQVIA™
 
-[![CI](https://github.com/bachya/pyiqvia/workflows/CI/badge.svg)](https://github.com/bachya/pyiqvia/actions)
-[![PyPi](https://img.shields.io/pypi/v/pyiqvia.svg)](https://pypi.python.org/pypi/pyiqvia)
-[![Version](https://img.shields.io/pypi/pyversions/pyiqvia.svg)](https://pypi.python.org/pypi/pyiqvia)
-[![License](https://img.shields.io/pypi/l/pyiqvia.svg)](https://github.com/bachya/pyiqvia/blob/main/LICENSE)
-[![Code Coverage](https://codecov.io/gh/bachya/pyiqvia/branch/dev/graph/badge.svg)](https://codecov.io/gh/bachya/pyiqvia)
-[![Maintainability](https://api.codeclimate.com/v1/badges/3bf37f9cabf73b5d991e/maintainability)](https://codeclimate.com/github/bachya/pyiqvia/maintainability)
-[![Say Thanks](https://img.shields.io/badge/SayThanks-!-1EAEDB.svg)](https://saythanks.io/to/bachya)
+[![CI][ci-badge]][ci]
+[![PyPI][pypi-badge]][pypi]
+[![Version][version-badge]][version]
+[![License][license-badge]][license]
+[![Code Coverage][codecov-badge]][codecov]
+[![Maintainability][maintainability-badge]][maintainability]
 
 <a href="https://www.buymeacoffee.com/bachya1208P" target="_blank"><img src="https://cdn.buymeacoffee.com/buttons/default-orange.png" alt="Buy Me A Coffee" height="41" width="174"></a>
 
-`pyiqvia` is an async-focused Python3 library for allergen, asthma, and disease
-data from the [IQVIA™](https://www.iqvia.com) family of websites (such as
-https://pollen.com, https://flustar.com, and more).
+`pyiqvia` is an async-focused Python3 library for allergen, asthma, and disease data from
+the [IQVIA™][iqvia] family of websites (such as [Pollen.com][pollen],
+[FluStar][flustar], and more).
 
 - [Python Versions](#python-versions)
 - [Installation](#installation)
@@ -107,9 +106,8 @@ asyncio.run(main())
 
 By default, the library creates a new connection to IQVIA with each coroutine. If you
 are calling a large number of coroutines (or merely want to squeeze out every second of
-runtime savings possible), an
-[`aiohttp`](https://github.com/aio-libs/aiohttp) `ClientSession` can be used for connection
-pooling:
+runtime savings possible), an [`aiohttp`][aiohttp] `ClientSession` can be used for
+connection pooling:
 
 ```python
 import asyncio
@@ -132,15 +130,37 @@ asyncio.run(main())
 
 # Contributing
 
-1. [Check for open features/bugs](https://github.com/bachya/pyiqvia/issues)
-   or [initiate a discussion on one](https://github.com/bachya/pyiqvia/issues/new).
-2. [Fork the repository](https://github.com/bachya/pyiqvia/fork).
+Thanks to all of [our contributors][contributors] so far!
+
+1. [Check for open features/bugs][issues] or [initiate a discussion on one][new-issue].
+2. [Fork the repository][fork].
 3. (_optional, but highly recommended_) Create a virtual environment: `python3 -m venv .venv`
 4. (_optional, but highly recommended_) Enter the virtual environment: `source ./.venv/bin/activate`
 5. Install the dev environment: `script/setup`
-6. Code your new feature or bug fix.
+6. Code your new feature or bug fix on a new branch.
 7. Write tests that cover your new functionality.
 8. Run tests and ensure 100% code coverage: `poetry run pytest --cov pyiqvia tests`
 9. Update `README.md` with any new documentation.
-10. Add yourself to `AUTHORS.md`.
-11. Submit a pull request!
+10. Submit a pull request!
+
+[aiohttp]: https://github.com/aio-libs/aiohttp
+[ci-badge]: https://github.com/bachya/pyiqvia/workflows/CI/badge.svg
+[ci]: https://github.com/bachya/pyiqvia/actions
+[codecov-badge]: https://codecov.io/gh/bachya/pyiqvia/branch/dev/graph/badge.svg
+[codecov]: https://codecov.io/gh/bachya/pyiqvia
+[contributors]: https://github.com/bachya/pyiqvia/graphs/contributors
+[flustar]: https://flustar.com
+[fork]: https://github.com/bachya/pyiqvia/fork
+[iqvia]: https://www.iqvia.com
+[issues]: https://github.com/bachya/pyiqvia/issues
+[license-badge]: https://img.shields.io/pypi/l/pyiqvia.svg
+[license]: https://github.com/bachya/pyiqvia/blob/main/LICENSE
+[maintainability-badge]: https://api.codeclimate.com/v1/badges/bd79edca07c8e4529cba/maintainability
+[maintainability]: https://codeclimate.com/github/bachya/pyiqvia/maintainability
+[new-issue]: https://github.com/bachya/pyiqvia/issues/new
+[new-issue]: https://github.com/bachya/pyiqvia/issues/new
+[pollen]: https://pollen.com
+[pypi-badge]: https://img.shields.io/pypi/v/pyiqvia.svg
+[pypi]: https://pypi.python.org/pypi/pyiqvia
+[version-badge]: https://img.shields.io/pypi/pyversions/pyiqvia.svg
+[version]: https://pypi.python.org/pypi/pyiqvia
