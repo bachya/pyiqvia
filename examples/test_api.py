@@ -12,7 +12,7 @@ async def main() -> None:
     async with ClientSession() as session:
         try:
             client = Client("17015", session=session)
-            print(f'Client instantiated for ZIP "{client.zip_code}"')
+            print(f"Client instantiated for ZIP: {client.zip_code}")
 
             print()
             print("Allergen Data:")
