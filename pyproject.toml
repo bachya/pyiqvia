@@ -63,7 +63,6 @@ aiohttp = ">=3.8.0"
 backoff = ">=1.11.1"
 certifi = ">=2023.07.22"
 python = "^3.9.0"
-setuptools = ">=65.5.1"
 
 [tool.poetry.group.dev.dependencies]
 GitPython = ">=3.1.32"
