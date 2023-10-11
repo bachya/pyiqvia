@@ -41,7 +41,7 @@ warn_unused_ignores = true
 
 [tool.poetry]
 name = "pyiqvia"
-version = "2023.08.1"
+version = "2023.10.0"
 description = "A clean, async-focused Python3 API for IQVIA data"
 readme = "README.md"
 authors = ["Aaron Bach <bachya1208@gmail.com>"]
