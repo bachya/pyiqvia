@@ -144,7 +144,7 @@ Thanks to all of [our contributors][contributors] so far!
 10. Submit a pull request!
 
 [aiohttp]: https://github.com/aio-libs/aiohttp
-[ci-badge]: https://github.com/bachya/pyiqvia/workflows/CI/badge.svg
+[ci-badge]: https://img.shields.io/github/actions/workflow/status/bachya/pyiqvia/test.yml
 [ci]: https://github.com/bachya/pyiqvia/actions
 [codecov-badge]: https://codecov.io/gh/bachya/pyiqvia/branch/dev/graph/badge.svg
 [codecov]: https://codecov.io/gh/bachya/pyiqvia
