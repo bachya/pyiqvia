@@ -1,4 +1,5 @@
 """Define common test utilities."""
+
 import os
 
 TEST_BAD_ZIP = "abcde"
