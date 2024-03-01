@@ -1,4 +1,5 @@
 """Define tests for the client object."""
+
 from __future__ import annotations
 
 import asyncio

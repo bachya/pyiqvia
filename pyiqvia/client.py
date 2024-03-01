@@ -1,4 +1,5 @@
 """Define a client to interact with IQVIA."""
+
 from __future__ import annotations
 
 import asyncio

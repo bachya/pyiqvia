@@ -1,4 +1,5 @@
 """Run an example script to quickly test."""
+
 import asyncio
 
 from aiohttp import ClientSession

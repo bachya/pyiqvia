@@ -1,4 +1,5 @@
 """Define tests for the "Asthma" object."""
+
 from __future__ import annotations
 
 import json
